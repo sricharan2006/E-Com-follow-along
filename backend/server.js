@@ -3,7 +3,6 @@ const dotenv = require("dotenv");
 
 // Load .env BEFORE using process.env
 dotenv.config({ path: "./config/.env" });
- // Automatically loads from root
 
 const connectDatabase = require("./db/Database");
 
@@ -15,6 +14,12 @@ console.log("Loaded MONGO_URI:", process.env.MONGO_URI); // Should print MongoDB
 // Connect to database AFTER loading .env
 connectDatabase();
 
-app.listen(process.env.PORT || 5000, () => {
-    console.log(`Server is running on http://localhost:${process.env.PORT}`);
+// ✅ Fix: Add a basic route
+app.get("/", (req, res) => {
+    res.send("Server is running!");
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
