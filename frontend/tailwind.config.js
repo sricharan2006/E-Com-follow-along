@@ -1,14 +1,7 @@
 export default {
-    purge: [],
-    darkMode: false, // or 'media' or 'class'
-    content:["./src/**/*.{html,js,jsx}"],
-    mode:"jit",
-    theme: {
-      extend: {},
-    },
-    variants: {
-      extend: {},
-    },
-    plugins: [],
-  }
-  
+  content: ["./src/**/*.{html,js,jsx,ts,tsx}"],  // ✅ Ensure correct paths
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
