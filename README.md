@@ -57,3 +57,9 @@ Implemented basic error handling to ensure smooth server operation.
 
 
 developed the frontend signup page using React. The page includes a form for users to register, with input validation for fields like email and password.  integrated the page with the backend API to handle user registration and implemented error handling to ensure a smooth user experience.
+
+
+### milestone 6 :
+
+
+In this milestone, we implemented the backend signup functionality, ensuring secure password storage and preventing duplicate user registrations. Additionally, we added optional functionality for user profile image uploads.
