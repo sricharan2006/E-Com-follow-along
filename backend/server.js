@@ -1,25 +1,32 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const cors = require("cors");
 
 // Load .env BEFORE using process.env
 dotenv.config({ path: "./config/.env" });
 
-const connectDatabase = require("./db/Database");
-
+// Initialize app FIRST before using it
 const app = express();
 
-// Debugging
-console.log("Loaded MONGO_URI:", process.env.MONGO_URI); // Should print MongoDB URI
+// Middleware
+app.use(cors());
+app.use(express.json()); // ✅ Required to parse JSON requests
+
+// Import database connection
+const connectDatabase = require("./db/Database");
 
 // Connect to database AFTER loading .env
 connectDatabase();
 
-// ✅ Fix: Add a basic route
+// ✅ Basic API route for testing
 app.get("/", (req, res) => {
     res.send("Server is running!");
 });
 
-const PORT = process.env.PORT || 5000;
+// Define PORT
+const PORT = process.env.PORT || 8000;
+
+// Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

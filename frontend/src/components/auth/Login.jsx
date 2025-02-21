@@ -1,9 +1,25 @@
 import { useState } from "react";
-import { Link } from "react-router-dom"; // ✅ Added Link import
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState(""); // ✅ Add error state
+
+    // Handle form submission
+    const handleSubmit = async (e) => {
+        e.preventDefault(); // Prevent default form submission
+        try {
+            // Make the POST request to the backend
+            const response = await axios.post("http://localhost:8000/api/v2/user/login", { email, password });
+            console.log(response.data)            // Redirect or take some action upon successful login here
+        } catch (error) {
+            // Handle errors (e.g., invalid credentials)
+            setError("There was an error logging in. Please check your credentials.");
+            console.error("There was an error logging in!", error);
+        }
+    };
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -14,7 +30,8 @@ const Login = () => {
             </div>
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
                 <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-                    <form className="space-y-6">
+                    {error && <p className="text-red-500 text-sm mb-4">{error}</p>} {/* ✅ Show error message */}
+                    <form className="space-y-6" onSubmit={handleSubmit}> {/* ✅ Added onSubmit */}
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email address</label>
                             <div className="mt-1">
@@ -36,7 +53,7 @@ const Login = () => {
                                 <input 
                                     type="password" 
                                     name="password" 
-                                    placeholder="password" 
+                                    placeholder="Password" 
                                     autoComplete="password" 
                                     required 
                                     value={password}
@@ -68,10 +85,9 @@ const Login = () => {
                             </button>
                         </div>
                     </form>
-                    {/* ✅ Added Sign-Up Link Below */}
                     <p className="text-center mt-4 text-sm text-gray-600">
-                    Don&apos;t have an account?
-                    <Link to="/signup" className="text-blue-600 hover:text-blue-500">Sign up</Link>
+                        Don&apos;t have an account? 
+                        <Link to="/signup" className="text-blue-600 hover:text-blue-500"> Sign up</Link>
                     </p>
                 </div>
             </div>
