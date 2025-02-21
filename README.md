@@ -63,3 +63,10 @@ developed the frontend signup page using React. The page includes a form for use
 
 
 In this milestone, we implemented the backend signup functionality, ensuring secure password storage and preventing duplicate user registrations. Additionally, we added optional functionality for user profile image uploads.
+
+
+### Milestone 7 :
+
+
+In this milestone, we implemented a login endpoint in the backend to validate user credentials. We updated the frontend (Login.jsx) to send a POST request with email and password, handled errors, and displayed success messages. The backend (user.js) verifies user credentials using bcrypt and returns a success response.
+
