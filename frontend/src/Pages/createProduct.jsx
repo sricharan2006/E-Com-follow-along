@@ -1,6 +1,7 @@
-import { useState,useEffect } from "react";
+import  { useState,useEffect } from "react";
 import { AiOutlinePlusCircle } from "react-icons/ai";
- 
+import axios from "axios";
+
 const CreateProduct = () => {
   const [images, setImages] = useState([]);
   const [name, setName] = useState("");
@@ -11,52 +12,95 @@ const CreateProduct = () => {
   const [stock, setStock] = useState("");
   const [email, setEmail] = useState("");
   const [previewImages, setPreviewImages] = useState([]); // Added state
- 
+
   const categoriesData = [
     { title: "Electronics" },
     { title: "Fashion" },
     { title: "Books" },
     { title: "Home Appliances" },
   ];
- 
+
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     setImages((prevImages) => prevImages.concat(files));
     const imagePreviews = files.map((file) => URL.createObjectURL(file));
     setPreviewImages((prevPreviews) => prevPreviews.concat(imagePreviews));
   };
- 
+
   useEffect(() => {
     // Cleanup object URLs to avoid memory leaks
     return () => {
         previewImages.forEach((url) => URL.revokeObjectURL(url));
     };
 }, [previewImages]);
- 
-  const handleSubmit = (e) => {
+// Below is Milestone 9:
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     const productData = {
+//       name,
+//       description,
+//       category,
+//       tags,
+//       price,
+//       stock,
+//       email,
+//       images,
+//     };
+//     console.log("Product Data:", productData);
+//     alert("Product created successfully!");
+//     setImages([]);
+//     setName("");
+//     setDescription("");
+//     setCategory("");
+//     setTags("");
+//     setPrice("");
+//     setStock("");
+//     setEmail("");
+//   };
+
+// ----------------------------------------------------------------
+// make changes for Milestone 10
+const handleSubmit = async (e) => {
     e.preventDefault();
-    const productData = {
-      name,
-      description,
-      category,
-      tags,
-      price,
-      stock,
-      email,
-      images,
-    };
-    console.log("Product Data:", productData);
-    alert("Product created successfully!");
-    setImages([]);
-    setName("");
-    setDescription("");
-    setCategory("");
-    setTags("");
-    setPrice("");
-    setStock("");
-    setEmail("");
+    console.log("Hi")
+  
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("category", category);
+    formData.append("tags", tags);
+    formData.append("price", price);
+    formData.append("stock", stock);
+    formData.append("email", email);
+  
+    images.forEach((image) => {
+        formData.append("images", image);
+    });
+  
+    try {
+        const response = await axios.post("http://localhost:8000/api/v2/product/create-product", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+  
+        if (response.status === 201) {
+            alert("Product created successfully!");
+            setImages([]);
+            setName("");
+            setDescription("");
+            setCategory("");
+            setTags("");
+            setPrice("");
+            setStock("");
+            setEmail("");
+        }
+    } catch (err) {
+        console.error("Error creating product:", err);
+        alert("Failed to create product. Please check the data and try again.");
+    }
   };
- 
+
   return (
     <div className="min-h screen flex items-center justify-center bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300">
     <div className="w-[90%] max-w-[500px] bg-white shadow-md h-auto rounded-md p-6 mx-auto mt-8 sm:mt-16 lg:mt-24">
@@ -78,7 +122,7 @@ const CreateProduct = () => {
             required
             />
         </div>
- 
+
         {/* Name Field */}
         <div className="mt-4">
           <label className="pb-1 block text-gray-600 font-medium">
@@ -93,7 +137,7 @@ const CreateProduct = () => {
             required
           />
         </div>
- 
+
         {/* Description Field */}
         <div className="mt-4">
           <label className="pb-1 block text-gray-600 font-medium">
@@ -108,7 +152,7 @@ const CreateProduct = () => {
             required
             ></textarea>
         </div>
- 
+
         {/* Category Field */}
         <div className="mt-4">
           <label className="pb-1 block text-gray-600 font-medium">
@@ -128,7 +172,7 @@ const CreateProduct = () => {
             ))}
           </select>
         </div>
- 
+
         {/* Tags Field */}
         <div className="mt-4">
           <label className="pb-1 block text-gray-600 font-medium">Tags</label>
@@ -140,7 +184,7 @@ const CreateProduct = () => {
             placeholder="Enter product tags"
             />
         </div>
- 
+
         {/* Price Field */}
         <div className="mt-4">
           <label className="pb-1 block text-gray-600 font-medium">
@@ -155,7 +199,7 @@ const CreateProduct = () => {
             required
             />
         </div>
- 
+
         {/* Stock Field */}
         <div className="mt-4">
           <label className="pb-1 block text-gray-600 font-medium">
@@ -170,7 +214,7 @@ const CreateProduct = () => {
             required
             />
         </div>
- 
+
         {/* Upload Images */}
         <div className="mt-4">
           <label className="pb-1 block text-gray-600 font-medium">
@@ -201,7 +245,7 @@ const CreateProduct = () => {
             ))}
           </div>
         </div>
- 
+
         {/* Submit Button */}
         <button
           type="submit"
@@ -214,5 +258,5 @@ const CreateProduct = () => {
     </div>
   );
 };
-export default CreateProduct;
 
+export default CreateProduct;
